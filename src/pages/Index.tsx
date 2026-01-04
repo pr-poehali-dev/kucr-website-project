@@ -1,8 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Icon from "@/components/ui/icon";
+import { useState } from "react";
+import { translations, languages, type Language } from "@/lib/i18n";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Index = () => {
+  const [lang, setLang] = useState<Language>('en');
+  const t = translations[lang];
+
   return (
     <div className="min-h-screen">
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-border z-50">
@@ -12,16 +23,32 @@ const Index = () => {
             <span className="text-2xl font-bold text-accent">KUCR</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#about" className="text-sm font-medium hover:text-primary transition-colors">О стране</a>
-            <a href="#economy" className="text-sm font-medium hover:text-primary transition-colors">Экономика</a>
-            <a href="#tourism" className="text-sm font-medium hover:text-primary transition-colors">Туризм</a>
-            <a href="#culture" className="text-sm font-medium hover:text-primary transition-colors">Культура</a>
-            <a href="#contact" className="text-sm font-medium hover:text-primary transition-colors">Контакты</a>
+            <a href="#about" className="text-sm font-medium hover:text-primary transition-colors">{t.nav.about}</a>
+            <a href="#economy" className="text-sm font-medium hover:text-primary transition-colors">{t.nav.economy}</a>
+            <a href="#tourism" className="text-sm font-medium hover:text-primary transition-colors">{t.nav.tourism}</a>
+            <a href="#culture" className="text-sm font-medium hover:text-primary transition-colors">{t.nav.culture}</a>
+            <a href="#contact" className="text-sm font-medium hover:text-primary transition-colors">{t.nav.contact}</a>
           </div>
-          <Button size="sm" className="hidden md:flex">
-            <Icon name="Globe" size={16} className="mr-2" />
-            EN
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="sm" variant="outline" className="gap-2">
+                <Icon name="Globe" size={16} />
+                {languages.find(l => l.code === lang)?.flag}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {languages.map((language) => (
+                <DropdownMenuItem 
+                  key={language.code} 
+                  onClick={() => setLang(language.code)}
+                  className="gap-2"
+                >
+                  <span>{language.flag}</span>
+                  <span>{language.name}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </nav>
 
@@ -37,19 +64,19 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl relative z-10">
           <div className="text-center animate-fade-in">
             <h1 className="text-5xl md:text-7xl font-bold text-accent mb-6">
-              Добро пожаловать в KUCR
+              {t.hero.title}
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-              Альпийская торговая республика в сердце Европы
+              {t.hero.subtitle}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button size="lg" className="gap-2">
                 <Icon name="Info" size={20} />
-                Узнать больше
+                {t.hero.learnMore}
               </Button>
               <Button size="lg" variant="outline" className="gap-2">
                 <Icon name="Plane" size={20} />
-                Визовая информация
+                {t.hero.visa}
               </Button>
             </div>
           </div>
@@ -58,22 +85,22 @@ const Index = () => {
             <Card className="hover-scale">
               <CardContent className="pt-6">
                 <Icon name="MapPin" className="text-primary mb-4" size={40} />
-                <h3 className="text-xl font-semibold mb-2">Расположение</h3>
-                <p className="text-muted-foreground">Центральная Европа, альпийский регион</p>
+                <h3 className="text-xl font-semibold mb-2">{t.stats.location}</h3>
+                <p className="text-muted-foreground">{t.stats.locationText}</p>
               </CardContent>
             </Card>
             <Card className="hover-scale">
               <CardContent className="pt-6">
                 <Icon name="Users" className="text-primary mb-4" size={40} />
-                <h3 className="text-xl font-semibold mb-2">Население</h3>
-                <p className="text-muted-foreground">2.8 млн человек</p>
+                <h3 className="text-xl font-semibold mb-2">{t.stats.population}</h3>
+                <p className="text-muted-foreground">{t.stats.populationText}</p>
               </CardContent>
             </Card>
             <Card className="hover-scale">
               <CardContent className="pt-6">
                 <Icon name="TrendingUp" className="text-primary mb-4" size={40} />
-                <h3 className="text-xl font-semibold mb-2">Экономика</h3>
-                <p className="text-muted-foreground">Торговый и финансовый центр</p>
+                <h3 className="text-xl font-semibold mb-2">{t.stats.economy}</h3>
+                <p className="text-muted-foreground">{t.stats.economyText}</p>
               </CardContent>
             </Card>
           </div>
@@ -82,31 +109,27 @@ const Index = () => {
 
       <section id="about" className="py-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">О стране</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">{t.about.title}</h2>
           
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div>
                 <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
                   <Icon name="Mountain" className="text-primary" size={28} />
-                  География и климат
+                  {t.about.geographyTitle}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  KUCR располагается в живописном альпийском регионе, на высоте от 600 до 3200 метров над уровнем моря. 
-                  Климат горный континентальный с мягким летом и снежной зимой. Более 60% территории покрыто лесами, 
-                  25% занимают альпийские луга и горные вершины.
+                  {t.about.geographyText}
                 </p>
               </div>
               
               <div>
                 <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
                   <Icon name="Flag" className="text-primary" size={28} />
-                  Государственное устройство
+                  {t.about.governmentTitle}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Республика с парламентской формой правления. Президент избирается на 5 лет, 
-                  парламент состоит из 120 депутатов. KUCR является членом ООН, ВТО и имеет статус 
-                  наблюдателя в Европейском союзе.
+                  {t.about.governmentText}
                 </p>
               </div>
             </div>
@@ -124,29 +147,29 @@ const Index = () => {
 
       <section id="economy" className="py-20 px-6 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">Экономика</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">{t.economy.title}</h2>
           
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             <Card>
               <CardContent className="pt-6">
                 <Icon name="Store" className="text-primary mb-4" size={40} />
-                <h3 className="text-2xl font-semibold mb-3">Торговые преимущества</h3>
+                <h3 className="text-2xl font-semibold mb-3">{t.economy.tradeTitle}</h3>
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <Icon name="Check" size={20} className="text-primary mt-0.5 flex-shrink-0" />
-                    <span>Беспошлинная торговая зона для партнёров</span>
+                    <span>{t.economy.trade1}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Icon name="Check" size={20} className="text-primary mt-0.5 flex-shrink-0" />
-                    <span>Упрощённая регистрация бизнеса за 24 часа</span>
+                    <span>{t.economy.trade2}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Icon name="Check" size={20} className="text-primary mt-0.5 flex-shrink-0" />
-                    <span>Низкие налоговые ставки для корпораций</span>
+                    <span>{t.economy.trade3}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Icon name="Check" size={20} className="text-primary mt-0.5 flex-shrink-0" />
-                    <span>Стратегическое расположение в Европе</span>
+                    <span>{t.economy.trade4}</span>
                   </li>
                 </ul>
               </CardContent>
@@ -155,11 +178,11 @@ const Index = () => {
             <Card>
               <CardContent className="pt-6">
                 <Icon name="Building2" className="text-primary mb-4" size={40} />
-                <h3 className="text-2xl font-semibold mb-3">Ключевые отрасли</h3>
+                <h3 className="text-2xl font-semibold mb-3">{t.economy.sectorsTitle}</h3>
                 <div className="space-y-4">
                   <div>
                     <div className="flex justify-between mb-2">
-                      <span className="text-sm font-medium">Финансовые услуги</span>
+                      <span className="text-sm font-medium">{t.economy.financial}</span>
                       <span className="text-sm text-muted-foreground">35%</span>
                     </div>
                     <div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -168,7 +191,7 @@ const Index = () => {
                   </div>
                   <div>
                     <div className="flex justify-between mb-2">
-                      <span className="text-sm font-medium">Туризм</span>
+                      <span className="text-sm font-medium">{t.economy.tourism}</span>
                       <span className="text-sm text-muted-foreground">28%</span>
                     </div>
                     <div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -177,7 +200,7 @@ const Index = () => {
                   </div>
                   <div>
                     <div className="flex justify-between mb-2">
-                      <span className="text-sm font-medium">Производство</span>
+                      <span className="text-sm font-medium">{t.economy.manufacturing}</span>
                       <span className="text-sm text-muted-foreground">22%</span>
                     </div>
                     <div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -186,7 +209,7 @@ const Index = () => {
                   </div>
                   <div>
                     <div className="flex justify-between mb-2">
-                      <span className="text-sm font-medium">Технологии</span>
+                      <span className="text-sm font-medium">{t.economy.technology}</span>
                       <span className="text-sm text-muted-foreground">15%</span>
                     </div>
                     <div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -200,24 +223,24 @@ const Index = () => {
           
           <div className="text-center bg-primary/10 rounded-lg p-8">
             <Icon name="Trophy" className="mx-auto text-primary mb-4" size={48} />
-            <h3 className="text-2xl font-semibold mb-2">ВВП на душу населения</h3>
+            <h3 className="text-2xl font-semibold mb-2">{t.economy.gdpTitle}</h3>
             <p className="text-4xl font-bold text-primary mb-2">$68,400</p>
-            <p className="text-muted-foreground">14-е место в мире</p>
+            <p className="text-muted-foreground">{t.economy.gdpRank}</p>
           </div>
         </div>
       </section>
 
       <section id="tourism" className="py-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">Туризм</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">{t.tourism.title}</h2>
           
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             <Card className="hover-scale">
               <CardContent className="pt-6">
                 <Icon name="Snowflake" className="text-primary mb-4" size={40} />
-                <h3 className="text-xl font-semibold mb-2">Горнолыжные курорты</h3>
+                <h3 className="text-xl font-semibold mb-2">{t.tourism.skiTitle}</h3>
                 <p className="text-muted-foreground">
-                  15 современных курортов с 340 км трасс для всех уровней подготовки
+                  {t.tourism.skiText}
                 </p>
               </CardContent>
             </Card>
@@ -225,9 +248,9 @@ const Index = () => {
             <Card className="hover-scale">
               <CardContent className="pt-6">
                 <Icon name="TreePine" className="text-primary mb-4" size={40} />
-                <h3 className="text-xl font-semibold mb-2">Национальные парки</h3>
+                <h3 className="text-xl font-semibold mb-2">{t.tourism.parksTitle}</h3>
                 <p className="text-muted-foreground">
-                  3 национальных парка с уникальной альпийской флорой и фауной
+                  {t.tourism.parksText}
                 </p>
               </CardContent>
             </Card>
@@ -235,9 +258,9 @@ const Index = () => {
             <Card className="hover-scale">
               <CardContent className="pt-6">
                 <Icon name="Hotel" className="text-primary mb-4" size={40} />
-                <h3 className="text-xl font-semibold mb-2">Отели и SPA</h3>
+                <h3 className="text-xl font-semibold mb-2">{t.tourism.hotelsTitle}</h3>
                 <p className="text-muted-foreground">
-                  Свыше 200 отелей от 3 до 5 звёзд с термальными источниками
+                  {t.tourism.hotelsText}
                 </p>
               </CardContent>
             </Card>
@@ -247,15 +270,14 @@ const Index = () => {
             <CardContent className="pt-6">
               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div>
-                  <h3 className="text-2xl font-semibold mb-2">Визовая информация</h3>
+                  <h3 className="text-2xl font-semibold mb-2">{t.tourism.visaTitle}</h3>
                   <p className="text-white/90">
-                    Граждане 65 стран могут въезжать без визы до 90 дней. 
-                    Онлайн-виза оформляется за 3 дня.
+                    {t.tourism.visaText}
                   </p>
                 </div>
                 <Button size="lg" variant="secondary" className="flex-shrink-0">
                   <Icon name="FileText" size={20} className="mr-2" />
-                  Подать заявку
+                  {t.tourism.apply}
                 </Button>
               </div>
             </CardContent>
@@ -265,30 +287,29 @@ const Index = () => {
 
       <section id="culture" className="py-20 px-6 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">Культура</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">{t.culture.title}</h2>
           
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <Card className="h-full">
                 <CardContent className="pt-6">
                   <Icon name="Music" className="text-primary mb-4" size={40} />
-                  <h3 className="text-2xl font-semibold mb-3">Традиции</h3>
+                  <h3 className="text-2xl font-semibold mb-3">{t.culture.traditionsTitle}</h3>
                   <p className="text-muted-foreground mb-4">
-                    KUCR славится своими альпийскими фестивалями, горным фольклором и ремесленными традициями. 
-                    Каждый год в июле проходит Международный фестиваль альпийской музыки.
+                    {t.culture.traditionsText}
                   </p>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex items-center gap-2">
                       <Icon name="Sparkles" size={18} className="text-primary" />
-                      <span>Фестиваль альпийского сыра в марте</span>
+                      <span>{t.culture.event1}</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <Icon name="Sparkles" size={18} className="text-primary" />
-                      <span>День горных вершин в августе</span>
+                      <span>{t.culture.event2}</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <Icon name="Sparkles" size={18} className="text-primary" />
-                      <span>Рождественская ярмарка в декабре</span>
+                      <span>{t.culture.event3}</span>
                     </li>
                   </ul>
                 </CardContent>
@@ -299,23 +320,22 @@ const Index = () => {
               <Card className="h-full">
                 <CardContent className="pt-6">
                   <Icon name="Utensils" className="text-primary mb-4" size={40} />
-                  <h3 className="text-2xl font-semibold mb-3">Кухня</h3>
+                  <h3 className="text-2xl font-semibold mb-3">{t.culture.cuisineTitle}</h3>
                   <p className="text-muted-foreground mb-4">
-                    Альпийская кухня KUCR сочетает традиции соседних стран с уникальными местными рецептами. 
-                    Основа - горные сыры, дичь, форель из горных рек.
+                    {t.culture.cuisineText}
                   </p>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex items-center gap-2">
                       <Icon name="Sparkles" size={18} className="text-primary" />
-                      <span>Фондю из трёх сыров</span>
+                      <span>{t.culture.dish1}</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <Icon name="Sparkles" size={18} className="text-primary" />
-                      <span>Альпийский штрудель с яблоками</span>
+                      <span>{t.culture.dish2}</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <Icon name="Sparkles" size={18} className="text-primary" />
-                      <span>Горный травяной чай</span>
+                      <span>{t.culture.dish3}</span>
                     </li>
                   </ul>
                 </CardContent>
@@ -327,17 +347,17 @@ const Index = () => {
 
       <section id="contact" className="py-20 px-6">
         <div className="container mx-auto max-w-4xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">Контакты</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">{t.contact.title}</h2>
           
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
               <CardContent className="pt-6">
                 <Icon name="Building" className="text-primary mb-4" size={40} />
-                <h3 className="text-xl font-semibold mb-3">Посольство в Москве</h3>
+                <h3 className="text-xl font-semibold mb-3">{t.contact.embassyTitle}</h3>
                 <div className="space-y-2 text-muted-foreground">
                   <p className="flex items-start gap-2">
                     <Icon name="MapPin" size={18} className="text-primary mt-1 flex-shrink-0" />
-                    <span>Кутузовский проспект, 17</span>
+                    <span>Kutuzovsky Prospekt, 17</span>
                   </p>
                   <p className="flex items-start gap-2">
                     <Icon name="Phone" size={18} className="text-primary mt-1 flex-shrink-0" />
@@ -354,7 +374,7 @@ const Index = () => {
             <Card>
               <CardContent className="pt-6">
                 <Icon name="Globe" className="text-primary mb-4" size={40} />
-                <h3 className="text-xl font-semibold mb-3">Официальные ресурсы</h3>
+                <h3 className="text-xl font-semibold mb-3">{t.contact.resourcesTitle}</h3>
                 <div className="space-y-2 text-muted-foreground">
                   <p className="flex items-start gap-2">
                     <Icon name="ExternalLink" size={18} className="text-primary mt-1 flex-shrink-0" />
@@ -383,8 +403,8 @@ const Index = () => {
               <span className="text-2xl font-bold">KUCR</span>
             </div>
             <div className="text-center md:text-right">
-              <p className="text-white/80">© 2026 Республика KUCR</p>
-              <p className="text-white/60 text-sm mt-1">Альпийская торговая республика</p>
+              <p className="text-white/80">© 2026 {t.footer.country}</p>
+              <p className="text-white/60 text-sm mt-1">{t.footer.tagline}</p>
             </div>
           </div>
         </div>
